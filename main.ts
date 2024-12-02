@@ -8,6 +8,23 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.boss, function (sprite, otherSpr
     effects.blizzard.startScreenEffect()
     game.gameOver(false)
 })
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (inGame) {
+        if (rario.isHittingTile(CollisionDirection.Bottom)) {
+            rario.vy = -150
+            if (controller.left.isPressed()) {
+                rario.setImage(assets.image`mJumpL`)
+                pause(500)
+                rario.setImage(assets.image`RarioL`)
+            }
+            if (controller.right.isPressed()) {
+                rario.setImage(assets.image`mJumpR`)
+                pause(500)
+                rario.setImage(assets.image`Rario`)
+            }
+        }
+    }
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite7, otherSprite3) {
     sprites.destroy(rario)
     effects.blizzard.startScreenEffect()
@@ -30,20 +47,17 @@ scene.onOverlapTile(SpriteKind.barril, assets.tile`stair2`, function (sprite6, l
     sprite6.setVelocity(50, 0)
     sprite6.ay = 500
 })
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (inGame) {
-        rario.setImage(assets.image`Rario`)
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (in_title) {
+        in_title = false
+        inMenu = true
+        Menu()
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.barril, function (sprite9, otherSprite4) {
     sprites.destroy(rario)
     effects.blizzard.startScreenEffect()
     game.gameOver(false)
-})
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (inGame) {
-        rario.setImage(assets.image`Rario`)
-    }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (inGame) {
@@ -55,13 +69,6 @@ function SpawnText (text: string, X: number, Y: number) {
     textSprite.setPosition(X, Y)
     textSprite.setOutline(1, 14)
 }
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (in_title) {
-        in_title = false
-        inMenu = true
-        Menu()
-    }
-})
 scene.onOverlapTile(SpriteKind.Player, assets.tile`stair2`, function (sprite8, location5) {
     if (controller.up.isPressed()) {
         rario.setVelocity(0, -50)
@@ -202,6 +209,11 @@ function FadeToBlack (Time2: number) {
     color.pauseUntilFadeDone()
     color.startFade(color.Black, color.originalPalette, Time2 / 2)
 }
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (inGame) {
+        rario.setImage(assets.image`Rario`)
+    }
+})
 scene.onOverlapTile(SpriteKind.Player, assets.tile`stair1`, function (sprite3, location) {
     if (controller.up.isPressed()) {
         rario.setVelocity(0, -50)
@@ -221,17 +233,9 @@ function SetUpGame () {
     nefer = sprites.create(assets.image`Nefertiti`, SpriteKind.princess)
     nefer.setPosition(300, 70)
 }
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     if (inGame) {
-        if (rario.isHittingTile(CollisionDirection.Bottom)) {
-            rario.vy = -150
-            if (controller.left.isPressed()) {
-                rario.setImage(assets.image`mJumpL`)
-            }
-            if (controller.right.isPressed()) {
-                rario.setImage(assets.image`mJumpR`)
-            }
-        }
+        rario.setImage(assets.image`Rario`)
     }
 })
 scene.onOverlapTile(SpriteKind.Projectile, sprites.dungeon.stairSouth, function (sprite4, location2) {

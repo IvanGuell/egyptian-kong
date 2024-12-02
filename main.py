@@ -10,6 +10,28 @@ def on_on_overlap(sprite, otherSprite):
     game.game_over(False)
 sprites.on_overlap(SpriteKind.player, SpriteKind.boss, on_on_overlap)
 
+def on_up_pressed():
+    if inGame:
+        if rario.is_hitting_tile(CollisionDirection.BOTTOM):
+            rario.vy = -150
+            if controller.left.is_pressed():
+                rario.set_image(assets.image("""
+                    mJumpL
+                """))
+                pause(500)
+                rario.set_image(assets.image("""
+                    RarioL
+                """))
+            if controller.right.is_pressed():
+                rario.set_image(assets.image("""
+                    mJumpR
+                """))
+                pause(500)
+                rario.set_image(assets.image("""
+                    Rario
+                """))
+controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
+
 def on_on_overlap2(sprite7, otherSprite3):
     sprites.destroy(rario)
     effects.blizzard.start_screen_effect()
@@ -42,25 +64,19 @@ scene.on_overlap_tile(SpriteKind.barril,
     """),
     on_overlap_tile2)
 
-def on_down_pressed():
-    if inGame:
-        rario.set_image(assets.image("""
-            Rario
-        """))
-controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
+def on_a_pressed():
+    global in_title, inMenu
+    if in_title:
+        in_title = False
+        inMenu = True
+        Menu()
+controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
 
 def on_on_overlap4(sprite9, otherSprite4):
     sprites.destroy(rario)
     effects.blizzard.start_screen_effect()
     game.game_over(False)
 sprites.on_overlap(SpriteKind.player, SpriteKind.barril, on_on_overlap4)
-
-def on_right_pressed():
-    if inGame:
-        rario.set_image(assets.image("""
-            Rario
-        """))
-controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
 def on_left_pressed():
     if inGame:
@@ -74,14 +90,6 @@ def SpawnText(text: str, X: number, Y: number):
     textSprite = textsprite.create(text, 0, 5)
     textSprite.set_position(X, Y)
     textSprite.set_outline(1, 14)
-
-def on_a_pressed():
-    global in_title, inMenu
-    if in_title:
-        in_title = False
-        inMenu = True
-        Menu()
-controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
 
 def on_overlap_tile3(sprite8, location5):
     if controller.up.is_pressed():
@@ -231,6 +239,13 @@ def FadeToBlack(Time2: number):
     color.pause_until_fade_done()
     color.start_fade(color.black, color.original_palette, Time2 / 2)
 
+def on_right_pressed():
+    if inGame:
+        rario.set_image(assets.image("""
+            Rario
+        """))
+controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
+
 def on_overlap_tile4(sprite3, location):
     if controller.up.is_pressed():
         rario.set_velocity(0, -50)
@@ -265,19 +280,12 @@ def SetUpGame():
     """), SpriteKind.princess)
     nefer.set_position(300, 70)
 
-def on_up_pressed():
+def on_down_pressed():
     if inGame:
-        if rario.is_hitting_tile(CollisionDirection.BOTTOM):
-            rario.vy = -150
-            if controller.left.is_pressed():
-                rario.set_image(assets.image("""
-                    mJumpL
-                """))
-            if controller.right.is_pressed():
-                rario.set_image(assets.image("""
-                    mJumpR
-                """))
-controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
+        rario.set_image(assets.image("""
+            Rario
+        """))
+controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
 def on_overlap_tile5(sprite4, location2):
     sprite4.set_velocity(-50, 0)
